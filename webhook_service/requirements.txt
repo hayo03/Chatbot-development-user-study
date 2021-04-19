@@ -1,5 +1,3 @@
 requests
-flask-core
-jwt
 flask
 geopy

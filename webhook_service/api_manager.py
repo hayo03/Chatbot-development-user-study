@@ -63,11 +63,11 @@ def invoke_api(fulfillment, slots_values_list):
             except KeyError as error:
                 return "Something went wrong in the third-party API"
     if fulfillment == "GetWeather_fulfillment":
+        for slot in slots:
+             if slot['name']=="city":
+                 q=str(slot['value'])
         appid=getAPI_credential('api.openweathermap','appid')
-        url = 'http://api.openweathermap.org/data/2.5/weather?q=[%q%]&appid='+appid
-        for slot in slots_values_list:
-            url = url.replace('[%{}%]'.format(slot['name']),
-                              ' '.join(slot['value']) if isinstance(slot['value'], list) else slot['value'])
+        url = 'http://api.openweathermap.org/data/2.5/weather?q='+q+'&appid='+appid
         result = requests.get(url)
         jsonResult = result.json()
         if result.status_code == 200:
@@ -76,8 +76,7 @@ def invoke_api(fulfillment, slots_values_list):
             print(reply)
             return reply
         else:
-            #print(jsonResult['message'])
-            return "There is light rain in there."
+            return "Something wrong with the API."
 
     if fulfillment == "BookDoctorAppointment_fulfillment":
          reply = "Done! Your appointment with Dr. [%doctorname%] on [%Appointmentdate%] is scheduled. You will receive a confirmation email shortly"
