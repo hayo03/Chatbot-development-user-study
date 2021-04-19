@@ -5,7 +5,9 @@ In the following, we explain the required steps in order to configure the Dialog
 ## How to configure Dialogflow CX Agent? 
 1. Download the source code in this github project. The source code includes the following files:
  - Study_Agent.blob: contains necessary intents, training phrases, and entities for this user study.
- - webhook_service: 
+ - webhook_service: contains two modules namely (1) webhook.py which represents the service that needs to be executed whenever a fulfillment is called; (2) api manager.py that defines actions that need to be executed for each fulfillment. Actions include external API calls. It contains also two addianation files:
+    - API_crendentials.json: contain credential information needed to make calls.
+    - requirements.txt: contain the libraries required to create the webhook service, namelly flask and requests.
 2. Go to [DialogFlow CX console](https://dialogflow.cloud.google.com/cx/projects) and connect to the console with your gmail
 3.  Create a new google cloud project and enable DialogFlow API.
 4.   Create a new empty agent.
