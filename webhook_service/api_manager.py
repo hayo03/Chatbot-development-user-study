@@ -79,11 +79,13 @@ def invoke_api(fulfillment, slots_values_list):
             return "Something wrong with the API."
 
     if fulfillment == "BookDoctorAppointment_fulfillment":
-         reply = "Done! Your appointment with Dr. [%doctorname%] on [%Appointmentdate%] is scheduled. You will receive a confirmation email shortly"
+         reply = "Done! Your appointment with Dr. [%doctorname%] on [%appointmentdate%] is scheduled. You will receive a confirmation email shortly"
          for slot in slots_values_list:
-            if slot['name'] == "Appointmentdate": 
-                slot['value']=slot['value'].split('T')[0]
-            reply = reply.replace('[%{}%]'.format(slot['name']), slot['value'])
+            if slot['name'] == "appointmentdate":
+                slot_date= str(int(slot['value']['day'])) + '/' + str(int(slot['value']['month'])) + '/' + str(int(slot['value']['year']))
+                reply = reply.replace('[%{}%]'.format(slot['name']), slot_date)
+            if slot['name'] == "doctorname":
+                reply = reply.replace('[%{}%]'.format(slot['name']), slot['value']['original'])
             print(reply)
          return reply
 
@@ -121,14 +123,16 @@ def invoke_api(fulfillment, slots_values_list):
                 return reply
 
     if fulfillment == "BookTaxi_fulfillment":
-        reply = "Done! I booked a taxi on [%pickupDate%] at [%pickupTime%] from [%pickupAddress%] to [%dropoffAddress%]."
+        reply = "Done! I booked a taxi on [%pickupdate%] at [%pickuptime%] from [%pickupaddress%] to [%dropoffaddress%]."
         for slot in slots_values_list:
-            if slot['name'] == "pickupDate":
-                slot['value']=slot['value'].split('T')[0]
-            elif slot['name'] == "pickupTime":
-                slot['value']=slot['value'].split('T')[1].split('+')[0]
-
-            reply = reply.replace('[%{}%]'.format(slot['name']),
+            if slot['name'] == "pickupdate":
+                slot_date= str(int(slot['value']['day'])) + '/' + str(int(slot['value']['month'])) + '/' + str(int(slot['value']['year']))
+                reply = reply.replace('[%{}%]'.format(slot['name']), slot_date)
+            elif slot['name'] == "pickuptime":
+                slot_time= str(int(slot['value']['hours'])) + ':' + str(int(slot['value']['minutes'])) + ':' + str(int(slot['value']['seconds']))
+                reply = reply.replace('[%{}%]'.format(slot['name']), slot_time)
+            else:
+                reply = reply.replace('[%{}%]'.format(slot['name']),
                               slot['value'] if not isinstance(slot['value'], list) else '+'.join(slot['value']))
         return reply
     if fulfillment=="FindDoctor_fulfillment":
@@ -136,9 +140,9 @@ def invoke_api(fulfillment, slots_values_list):
         Dtype = ''
         apikey=''
         for slot in slots_values_list:
-            if slot['name'] == 'City':
+            if slot['name'] == 'city':
                 City = slot['value']   
-            elif slot['name'] =='Type'and slot['value']=='Dentist':
+            elif slot['name'] =='type'and slot['value']=='dentist':
                  Dtype = slot['value']
             else: 
                  Dtype = 'Doctor'
@@ -188,19 +192,23 @@ def invoke_api(fulfillment, slots_values_list):
         return result
  
     if fulfillment == "ReserveRoundtripFlights_fulfillment":
-        reply="Done! I have booked your flight tickets for [%departureDate%] to [%returnDate%], flying from [%originLocation%] to [%destinationLocation%]."
+        reply="Done! I have booked your flight tickets for [%departuredate%] to [%returndate%], flying from [%originlocation%] to [%destinationlocation%]."
         for slot in slots_values_list:
-            if slot['name'] in {'departureDate','returnDate'}:
-                slot['value']=slot['value'].split('T')[0]
-            reply = reply.replace('[%{}%]'.format(slot['name']), slot['value'])
+            if slot['name'] in {'departuredate','returndate'}:
+                slot_date= str(int(slot['value']['day'])) + '/' + str(int(slot['value']['month'])) + '/' + str(int(slot['value']['year']))
+                reply = reply.replace('[%{}%]'.format(slot['name']), slot_date)
+            else:
+                reply = reply.replace('[%{}%]'.format(slot['name']), slot['value'])
         print(reply)
         return reply
     if fulfillment == "ReserveHotel_fulfillment":
-        reply="Done! Your booking in [%city%] for [%checkInDate%] to [%checkOutDate%] is confirmed."
+        reply="Done! Your booking in [%city%] for [%checkindate%] to [%checkoutdate%] is confirmed."
         for slot in slots_values_list:
-            if slot['name'] in {'checkInDate','checkOutDate'}:
-                slot['value']=slot['value'].split('T')[0]
-            reply = reply.replace('[%{}%]'.format(slot['name']), slot['value'])
+            if slot['name'] in {'checkindate','checkoutdate'}:
+                slot_date= str(int(slot['value']['day'])) + '/' + str(int(slot['value']['month'])) + '/' + str(int(slot['value']['year']))
+                reply = reply.replace('[%{}%]'.format(slot['name']), slot_date)
+            else:
+                reply = reply.replace('[%{}%]'.format(slot['name']), slot['value'])
         print(reply)
         return reply
 
