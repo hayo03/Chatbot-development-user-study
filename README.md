@@ -18,9 +18,8 @@ In the following, we explain the required steps in order to configure the Dialog
 2. Once you get the required credentials and complete API_credentials.json file, open terminal and run the following commands.
  - Operating system: macOS/OS X, Linux; 
 ```
-pip install virtualenv
 cd webhook_service
-virtualenv -p python3 myenv
+python3 -m venv myenv
 source myenv/bin/activate
 pip install -r requirements.txt
 python webhook.py
